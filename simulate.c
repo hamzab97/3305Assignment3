@@ -1,9 +1,9 @@
 /******************************************************************************
-* 
+*
 * Name: 	Zaid Albirawi
 * Email: 	zalbiraw@uwo.ca
 *
-* simulate.c 
+* simulate.c
 *
 ******************************************************************************/
 
@@ -15,7 +15,11 @@ d_linked_list_t *jobs;
 
 void* run(void *j)
 {
-	job_t *job = get_next_job(mode, jobs);
+	// printf("mode is %d\n", mode);
+	if (mode == 3) //if mode is roundRobin then also pass time quantum
+		job_t *job = roundRobin(jobs, time_quantum);
+	else job_t *job = get_next_job(mode, jobs);
+	// job_t *job = get_next_job(mode, jobs);
 	int number, required_memory;
 
 	while (job != NULL)
@@ -45,14 +49,14 @@ void* run(void *j)
 		/**********************************************************************
 		* checks if the memory requested exceeds current available memory
 		**********************************************************************/
-		else 
+		else
 		{
 			/******************************************************************
-			* inform user that the job doesn't have enough resources at the 
+			* inform user that the job doesn't have enough resources at the
 			* moment, add the job back to the list
 			******************************************************************/
 			print_insufficient_memory(fp, number);
-			
+
 			enqueue(jobs, job);
 		}
 
@@ -64,7 +68,7 @@ void* run(void *j)
 }
 
 /******************************************************************************
-* 
+*
 ******************************************************************************/
 void simulate(int memory_value, int mode_value, int time_quantum_value,
 	d_linked_list_t *list)

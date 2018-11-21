@@ -3,9 +3,9 @@ CFLAGS=-c
 CMATH=-lm
 PFLAG=-pthread
 
-all: clean myOS 
+all: clean myOS
 
-myOS: myOS.o shell.o execute.o tokenize.o simulator.o simulate.o scheduler.o job.o d_linked_list.o helper.o
+myOS: myOS.o shell.o execute.o tokenize.o simulator.o simulate.o scheduler.o job.o d_linked_list.o helper.o bubbleSort.o
 	$(CC) -o $@ $^ $(CMATH) $(PFLAG)
 
 myOS.o: myOS.c myOS.h
@@ -26,7 +26,7 @@ simulator.o: simulator.c simulator.h
 simulate.o: simulate.c simulate.h
 	$(CC) $(CFLAGS) -o $@ $<  $(PFLAG)
 
-scheduler.o: scheduler.c scheduler.h 
+scheduler.o: scheduler.c scheduler.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 job.o: job.c job.h
@@ -35,7 +35,10 @@ job.o: job.c job.h
 d_linked_list.o: d_linked_list.c d_linked_list.h
 	$(CC) $(CFLAGS) -o $@ $<
 
-helper.o: helper.c helper.h 
+helper.o: helper.c helper.h
+	$(CC) $(CFLAGS) -o $@ $<
+
+bubbleSort.o: bubbleSort.c bubbleSort.h
 	$(CC) $(CFLAGS) -o $@ $<
 
 test: clean myOS test1 test2
