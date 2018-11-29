@@ -18,10 +18,10 @@ void* run(void *j)
 {
 	// printf("mode is %d\n", mode);
 	job_t *job;
-	// if (time_quantum || mode == 3)//(mode == 3) //if mode is roundRobin then also pass time quantum
-	// 	job = roundRobin(jobs, time_quantum);
-	// else job = get_next_job(mode, jobs);
-	job = get_next_job(mode, jobs);
+	if (time_quantum || mode == 3)//(mode == 3) //if mode is roundRobin then also pass time quantum
+		job = roundRobin(jobs, time_quantum);
+	else job = get_next_job(mode, jobs);
+	// job = get_next_job(mode, jobs);
 	int number, required_memory;
 
 	while (job != NULL)

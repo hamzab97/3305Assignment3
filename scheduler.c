@@ -78,7 +78,7 @@ job_t *shortestJobFirst(d_linked_list_t* jobs){
 	//minNode now points to the node with the smallest valu ein the linked list
 	printf("min node value is: %d\n", minValue);
 	struct d_node *shortJob = (struct d_node*)malloc(sizeof(struct d_node));
-	memcpy(shortJob, minNode, sizeof(job_t*)); //copy node
+	memcpy(shortJob, minNode, sizeof(struct d_node)); //copy node
 	erase(jobs, minNode); //call the erase method
 	return ((job_t*)shortJob->value);
 }
@@ -93,12 +93,15 @@ job_t *roundRobin(d_linked_list_t* jobs, int time_quantum){
 	//return head
 	job_t *j;
 	// j = jobs->head; //get the head of the job
-	void* timeRequired = jobs->head->value; //get the required_time
-	if (timeRequired > time_quantum){
-		void *newTime = timeRequired - time_quantum;
-		enqueue(jobs, newTime); //enqueue the left over time at the end of the queue
-		jobs->head->value = time_quantum;
-	}
 	j = dequeue(jobs); //dequeue the first job in the linkedlist
+	int timeRequired = j->required_time; //get the required_time
+	if (timeRequired > time_quantum){
+		int newTime = timeRequired - time_quantum;
+		int number = j->number;
+		int requiredmemory = j->required_memory
+		enqueue(jobs, (void*)init_job(number, requiredmemory, newTime));
+		j->required_time = time_quantum;
+	}
+
 	return j;
 }
