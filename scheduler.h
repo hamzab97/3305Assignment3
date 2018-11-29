@@ -13,7 +13,8 @@
 #include "job.h"
 #include "d_linked_list.h"
 #include "helper.h"
-#include "bubbleSort.h"
+// #include "bubbleSort.h"
+// #include <pthread.h>
 
 // job_t *get_next_job(int, d_linked_list_t*, int);
 job_t *get_next_job(int, d_linked_list_t*);

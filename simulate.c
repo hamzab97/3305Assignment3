@@ -12,7 +12,7 @@
 int memory, max_memory, mode, time_quantum;
 FILE *fp;
 d_linked_list_t *jobs;
-pthread_mutex_t lock; //declare pthread lock
+pthread_mutex_t lock = PTHREAD_MUTEX_INITIALIZER; //declare pthread lock
 
 void* run(void *j)
 {
@@ -106,10 +106,9 @@ void simulate(int memory_value, int mode_value, int time_quantum_value,
 	jobs = list;
 
 	//initialize lock
-	if (pthread_mutex_init(&lock, NULL) != 0){
-		printf("mutex init fialed\n");
-		return 0;
-	}
+	// if (pthread_mutex_init(&lock, NULL) != 0){
+	// 	printf("mutex init failed\n");
+	// }
 
 	/**************************************************************************
 	* create threads and run jobs
@@ -131,12 +130,11 @@ void simulate(int memory_value, int mode_value, int time_quantum_value,
 		pthread_join(threads[i], NULL);
 
 	//destroy locks
-	pthread_mutex_destroy(&lock);
+	// pthread_mutex_destroy(&lock);
 }
 
 void execute_job(job_t *job) {
-	//put lock
-	pthread_mutex_lock(&lock);
+
 
 	int number = job->number,
 		required_memory = job->required_memory;
@@ -163,13 +161,15 @@ void execute_job(job_t *job) {
 	******************************************************************/
 	deallocate_memory(required_memory);
 
-	//unlock
-	pthread_mutex_unlock(&lock);
 }
 
 void allocate_memory(int r) {
+	//put lock
+	pthread_mutex_lock(&lock);
 	memory -= r;
 	print_allocate_memory(fp, memory, r);
+	//unlock
+	pthread_mutex_unlock(&lock);
 }
 
 void deallocate_memory(int r) {

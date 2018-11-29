@@ -23,11 +23,11 @@ Memory at 744
 Starting job #1
 Allocating 120
 Memory at 624
-Job #3 completed
-Deallocating 130
-Memory at 754
 Job #4 completed
 Deallocating 140
+Memory at 764
+Job #3 completed
+Deallocating 130
 Memory at 894
 Job #2 completed
 Deallocating 10
