@@ -27,5 +27,6 @@ void simulate(int, int, int, d_linked_list_t*);
 void execute_job(job_t*);
 void allocate_memory(int);
 void deallocate_memory(int);
+void RRexecuation(job_t*);
 
 #endif

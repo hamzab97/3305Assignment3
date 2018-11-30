@@ -18,11 +18,12 @@ void* run(void *j)
 {
 	// printf("mode is %d\n", mode);
 	job_t *job;
-	if (time_quantum || mode == 3)//(mode == 3) //if mode is roundRobin then also pass time quantum
-		job = roundRobin(jobs, time_quantum);
-	else job = get_next_job(mode, jobs);
-	// job = get_next_job(mode, jobs);
+	// if (time_quantum || mode == 3)//(mode == 3) //if mode is roundRobin then also pass time quantum
+	// 	job = roundRobin(jobs, time_quantum);
+	// else job = get_next_job(mode, jobs);
+	job = get_next_job(mode, jobs);
 	int number, required_memory;
+	// printf("job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
 
 	while (job != NULL)
 	{
@@ -47,7 +48,13 @@ void* run(void *j)
 		* runs job
 		**********************************************************************/
 		if (required_memory <= memory) {
-			execute_job(job);
+			//check for RR
+			if (mode == 3 && job->required_time > time_quantum){
+				//time greater than quantum
+				RRexecuation(job); //execute RR thread
+				enqueue(jobs, job); //put the job back on the queue because its not fully complete
+			}else
+				execute_job(job);
 			//junlock
 		}
 
@@ -133,6 +140,37 @@ void simulate(int memory_value, int mode_value, int time_quantum_value,
 	// pthread_mutex_destroy(&lock);
 }
 
+void RRexecuation(job_t *job) {
+	// printf("start job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
+
+	int number = job->number,
+		required_memory = job->required_memory;
+
+	/******************************************************************
+	* inform user that the job started executing and allocate mrmory
+	******************************************************************/
+	print_starting(fp, number);
+	allocate_memory(required_memory);
+
+	/******************************************************************
+	* run the job
+	******************************************************************/
+	sleep(time_quantum);
+
+	/******************************************************************
+	* inform user that the job finished executing
+	******************************************************************/
+	print_completed(fp, number);
+	// free(job);
+
+	/******************************************************************
+	* deallocate memory
+	******************************************************************/
+	deallocate_memory(required_memory);
+	job->required_time = job->required_time - time_quantum; //find the time left to run
+	// printf("end job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
+}
+
 void execute_job(job_t *job) {
 
 
@@ -154,7 +192,9 @@ void execute_job(job_t *job) {
 	* inform user that the job finished executing
 	******************************************************************/
 	print_completed(fp, number);
-	free(job);
+	if (mode != 2){ //sjf handles memory management
+		free(job);
+	}
 
 	/******************************************************************
 	* deallocate memory

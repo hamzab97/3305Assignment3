@@ -28,7 +28,7 @@ job_t *get_next_job(int mode, d_linked_list_t* jobs) {
 	//put lock
 	job_t *j;
 	pthread_mutex_lock(&lock1);
-	if (mode == FCFS)
+	if (mode == FCFS || mode == RR)
 		j= firstComeFirstServe(jobs);
 	else if (mode == LIFO)
 		j= lastInFirstOut(jobs);
@@ -67,6 +67,7 @@ job_t *shortestJobFirst(d_linked_list_t* jobs){
 	// printf("min node value is %d\n", ((job_t*)minNode)->required_memory);
 	struct d_node *temp = jobs->head;
 	for (int i = 1; i < jobs->size; i++){
+		printf("hoi\n");
 		// printf("hello\n");
 		temp = temp->next; //iterate through the linked list
 		if (((job_t*)temp->value)->required_time < minValue){
@@ -84,24 +85,28 @@ job_t *shortestJobFirst(d_linked_list_t* jobs){
 }
 
 //method to handle next job if mode is RR
-job_t *roundRobin(d_linked_list_t* jobs, int time_quantum){
-	//get time of head of linked last
-	//if time of job > quantum time
-	//time = time of job - quantum time
-	//new job = same as head except update value of time
-	//update value of head to be same as quantum time
-	//return head
-	job_t *j;
-	// j = jobs->head; //get the head of the job
-	j = dequeue(jobs); //dequeue the first job in the linkedlist
-	int timeRequired = j->required_time; //get the required_time
-	if (timeRequired > time_quantum){
-		int newTime = timeRequired - time_quantum;
-		int number = j->number;
-		int requiredmemory = j->required_memory
-		enqueue(jobs, (void*)init_job(number, requiredmemory, newTime));
-		j->required_time = time_quantum;
-	}
-
-	return j;
-}
+// job_t *roundRobin(d_linked_list_t* jobs, int time_quantum){
+// 	// pthread_mutex_lock(&lock1);
+// 	//get time of head of linked last
+// 	//if time of job > quantum time
+// 	//time = time of job - quantum time
+// 	//new job = same as head except update value of time
+// 	//update value of head to be same as quantum time
+// 	//return head
+// 	job_t *j;
+// 	// j = jobs->head; //get the head of the job
+// 	j = dequeue(jobs); //dequeue the first job in the linkedlist
+// 	int timeRequired = j->required_time; //get the required_time
+// 	printf("job time is %d and time quantum is %d\n", timeRequired, time_quantum);
+// 	if (timeRequired > time_quantum){
+// 		int newTime = timeRequired - time_quantum;
+// 		int number = j->number;
+// 		int requiredmemory = j->required_memory;
+// 		printf("new time is %d, number ios %d, required mem is %d\n", newTime, number, requiredmemory);
+// 		enqueue(jobs, (void*)init_job(number, requiredmemory, newTime));
+// 		j->required_time = time_quantum;
+// 		printf("time for the next job to run is %d\n", j->required_time);
+// 	}
+// 	// pthread_mutex_lock(&lock1);
+// 	return j;
+// }
