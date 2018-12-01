@@ -141,8 +141,8 @@ void simulate(int memory_value, int mode_value, int time_quantum_value,
 }
 
 void RRexecuation(job_t *job) {
-	// printf("start job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
-
+	// printf("\nstart job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
+	// printf("RR accessed, stack size %d\n", jobs->size);
 	int number = job->number,
 		required_memory = job->required_memory;
 
@@ -168,7 +168,7 @@ void RRexecuation(job_t *job) {
 	******************************************************************/
 	deallocate_memory(required_memory);
 	job->required_time = job->required_time - time_quantum; //find the time left to run
-	// printf("end job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
+	// printf("end job number: %d now has time: %d and mem %d\n\n", job->number, job->required_time, job->required_memory);
 }
 
 void execute_job(job_t *job) {
