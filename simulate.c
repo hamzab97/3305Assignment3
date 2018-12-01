@@ -140,6 +140,9 @@ void simulate(int memory_value, int mode_value, int time_quantum_value,
 	// pthread_mutex_destroy(&lock);
 }
 
+/*
+method for execution of roundRobin alg
+*/
 void RRexecuation(job_t *job) {
 	// printf("\nstart job number: %d now has time: %d and mem %d\n", job->number, job->required_time, job->required_memory);
 	// printf("RR accessed, stack size %d\n", jobs->size);
